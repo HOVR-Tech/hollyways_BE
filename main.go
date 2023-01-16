@@ -6,6 +6,7 @@ import (
 	"hollyways/pkg/mysql"
 	"hollyways/routes"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -27,7 +28,9 @@ func main() {
 
 	r.PathPrefix("/uploads").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads"))))
 	routes.RouteInit(r.PathPrefix("/api/v1").Subrouter())
+	
+	var PORT = os.Getenv('PORT')
 
 	fmt.Println("SERVER IS ONLINE 🚀")
-	http.ListenAndServe("localhost:5000", handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
+	http.ListenAndServe(":" +PORT, handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
 }
